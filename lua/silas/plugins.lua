@@ -56,10 +56,4 @@ return {
     {
         "mbbill/undotree",
     },
-    {
-        "nanotee/sqls.nvim",
-        keys = {
-            { "<C-C>R", mode = { "i" }, false },
-        }
-    },
 }

@@ -61,13 +61,24 @@ lspconfig.sourcekit.setup {
 lspconfig.htmx.setup {
     filetypes = { 'templ', 'html' }
 }
+lspconfig.html.setup {
+    filetypes = { 'php', 'html' }
+}
 lspconfig.yamlls.setup {
     filetypes = { 'templ' },
     cmd = { 'templ', 'lsp' }
 }
 lspconfig.pyright.setup { on_attach = on_attach, settings = { pyright = { autoImportCompletion = true, }, python = { analysis = { autoSearchPaths = true, diagnosticMode = 'openFilesOnly', useLibraryCodeForTypes = true, typeCheckingMode = 'off' } } } }
 lspconfig.intelephense.setup {
-    filetypes = { 'php', 'block' }
+    filetypes = { 'php', 'block' },
+    -- root_dir = lspconfig.util.root_pattern(".git"),
+    settings = {
+        intelephense = {
+            files = {
+                maxSize = 1000000,
+            },
+        }
+    }
 }
 lspconfig.tsserver.setup {}
 
