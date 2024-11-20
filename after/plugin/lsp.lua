@@ -5,7 +5,7 @@ lspconfig.gopls.setup {
     root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git")
 }
 
-lspconfig.sqls.setup {
+lspconfig.sqlls.setup {
     on_attach = function(client, bufnr)
         require('sqls').on_attach(client, bufnr)
     end,
