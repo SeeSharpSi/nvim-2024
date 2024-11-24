@@ -11,6 +11,7 @@ vim.keymap.del("i", "<C-c>f", { buffer = 0 })
 vim.keymap.del("i", "<C-c>k", { buffer = 0 })
 vim.keymap.del("i", "<C-c>a", { buffer = 0 })
 vim.keymap.del("i", "<C-c>L", { buffer = 0 })
+-- below can be replaced with whatever formatter (e.g. sql-formatter) 
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(ev)
         -- Restrict to specific file types (e.g., "sql")
