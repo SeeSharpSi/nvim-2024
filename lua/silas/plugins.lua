@@ -56,4 +56,7 @@ return {
     {
         "mbbill/undotree",
     },
+    {
+        "nanotee/sqls.nvim",
+    },
 }
