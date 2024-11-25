@@ -62,4 +62,7 @@ return {
     {
         "yuchanns/phpfmt.nvim",
     },
+    {
+        "psf/black",
+    },
 }
