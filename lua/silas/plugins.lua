@@ -65,4 +65,7 @@ return {
     {
         "psf/black",
     },
+    {
+        "stsewd/isort.nvim",
+    },
 }
