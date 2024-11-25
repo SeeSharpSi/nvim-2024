@@ -62,7 +62,7 @@ lspconfig.htmx.setup {
     filetypes = { 'templ', 'html' }
 }
 lspconfig.html.setup {
-    filetypes = { 'php', 'html' }
+    filetypes = { 'html' }
 }
 lspconfig.yamlls.setup {
     filetypes = { 'templ' },

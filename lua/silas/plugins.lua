@@ -59,4 +59,7 @@ return {
     {
         "nanotee/sqls.nvim",
     },
+    {
+        "yuchanns/phpfmt.nvim",
+    },
 }
