@@ -5,11 +5,19 @@ lspconfig.gopls.setup {
     root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git")
 }
 
+local tmp_cmd = "/Users/silas/go/bin/sqls"
+if vim.fn.exists('g:os') == 0 then
+    local is_windows = vim.fn.has("win64") == 1 or vim.fn.has("win32") == 1 or vim.fn.has("win16") == 1
+    if is_windows then
+        tmp_cmd = "C:/Users/stompkins9/go/bin/sqls.exe"
+    end
+end
+
 lspconfig.sqlls.setup {
     on_attach = function(client, bufnr)
         require('sqls').on_attach(client, bufnr)
     end,
-    cmd = { "C:/Users/stompkins9/go/bin/sqls.exe", "-config", "./sqls_config.yml" },
+    cmd = { tmp_cmd, "-config", "./sqls_config.yml" },
     root_dir = lspconfig.util.root_pattern('.git', 'config.yml'),
 }
 
