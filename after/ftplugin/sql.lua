@@ -11,13 +11,14 @@ vim.keymap.del("i", "<C-c>f", { buffer = 0 })
 vim.keymap.del("i", "<C-c>k", { buffer = 0 })
 vim.keymap.del("i", "<C-c>a", { buffer = 0 })
 vim.keymap.del("i", "<C-c>L", { buffer = 0 })
--- below can be replaced with whatever formatter (e.g. sql-formatter) 
+-- below can be replaced with whatever formatter (e.g. sql-formatter)
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(ev)
         -- Restrict to specific file types (e.g., "sql")
         local filetype = vim.api.nvim_buf_get_option(ev.buf, "filetype")
         if filetype == "sql" then
             vim.keymap.set('n', '<space>f', function()
+                vim.o.shell = "cmd.exe"
                 -- Get the current buffer content
                 local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
                 -- Process buffer content with `sleek`
@@ -28,6 +29,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
                 else
                     vim.notify("Sleek formatting failed: " .. formatted, vim.log.levels.ERROR)
                 end
+                vim.o.shell = "C:/windows/System32/WindowsPowerShell/v1.0/powershell.exe"
             end, { buffer = ev.buf, silent = true })
         end
     end,
