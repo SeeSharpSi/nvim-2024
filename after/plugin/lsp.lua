@@ -168,7 +168,7 @@ lspconfig.intelephense.setup {
         }
     }
 }
-lspconfig.tsserver.setup {}
+lspconfig.ts_ls.setup {}
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
