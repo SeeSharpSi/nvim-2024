@@ -1,11 +1,8 @@
 -- Setup language servers.
-local util = require 'lspconfig.util'
-local configs = require('lspconfig.configs')
-local lspconfig = require('lspconfig')
-lspconfig.templ.setup {}
-lspconfig.gopls.setup {
-    root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git")
-}
+vim.lsp.enable('templ')
+vim.lsp.enable('gopls')
+vim.lsp.enable('html')
+vim.lsp.enable('ts_ls')
 
 local tmp_cmd = "/Users/silas/go/bin/sqls"
 if vim.fn.exists('g:os') == 0 then
@@ -15,69 +12,9 @@ if vim.fn.exists('g:os') == 0 then
     end
 end
 
-lspconfig.sqlls.setup {
-    on_attach = function(client, bufnr)
-        require('sqls').on_attach(client, bufnr)
-    end,
-    cmd = { tmp_cmd, "-config", "./sqls_config.yml" },
-    root_dir = lspconfig.util.root_pattern('.git', 'config.yml'),
-}
-
-require 'lspconfig'.lua_ls.setup {
-    on_init = function(client)
-        if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-                return
-            end
-        end
-
-        client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-            runtime = {
-                -- Tell the language server which version of Lua you're using
-                -- (most likely LuaJIT in the case of Neovim)
-                version = 'LuaJIT'
-            },
-            -- Make the server aware of Neovim runtime files
-            workspace = {
-                checkThirdParty = false,
-                library = {
-                    vim.env.VIMRUNTIME
-                    -- Depending on the usage, you might want to add additional paths here.
-                    -- "${3rd}/luv/library"
-                    -- "${3rd}/busted/library",
-                }
-                -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-                -- library = vim.api.nvim_get_runtime_file("", true)
-            }
-        })
-    end,
-    settings = {
-        Lua = {}
-    }
-}
--- lspconfig.phpactor.setup {
--- cmd = {"C:/users/stompkins9/AppData/Local/nvim-data/mason/bin/phpactor.cmd", "language-server"}
--- } this doesnt work because windows is awesome
-lspconfig.sourcekit.setup {
-    capabilities = {
-        workspace = {
-            didChangeWatchedFiles = {
-                dynamicRegistration = true,
-            },
-        },
-    },
-}
-lspconfig.htmx.setup {
+vim.lsp.config('htmx', {
     filetypes = { 'templ', 'html' }
-}
-lspconfig.html.setup {
-    filetypes = { 'html' }
-}
-lspconfig.yamlls.setup {
-    filetypes = { 'templ' },
-    cmd = { 'templ', 'lsp' }
-}
+})
 
 -- basedpyright stuff START
 local function organize_imports()
@@ -111,64 +48,8 @@ local function set_python_path(path)
     end
 end
 
-if not configs.basedpyright then
-    configs.basedpyright = {
-        default_config = {
-            cmd = { 'basedpyright-langserver', '--stdio' },
-            filetypes = { 'python' },
-            root_dir = function(fname)
-                return util.root_pattern(unpack({ 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt',
-                    'Pipfile', 'pyrightconfig.json', '.git', }))(fname)
-            end,
-            single_file_support = true,
-            settings = {
-                basedpyright = {
-                    analysis = {
-                        autoSearchPaths = true,
-                        useLibraryCodeForTypes = true,
-                        diagnosticMode = 'openFilesOnly',
-                    },
-                },
-            },
-        },
-        commands = {
-            PyrightOrganizeImports = {
-                organize_imports,
-                description = 'Organize Imports',
-            },
-            PyrightSetPythonPath = {
-                set_python_path,
-                description = 'Reconfigure basedpyright with the provided python path',
-                nargs = 1,
-                complete = 'file',
-            },
-        },
-        docs = {
-            description = [[
-https://detachhead.github.io/basedpyright
-
-`basedpyright`, a static type checker and language server for python
-]],
-        },
-    }
-end
-
-lspconfig.pyright.setup { on_attach = on_attach, settings = { pyright = { autoImportCompletion = true, }, python = { analysis = { autoSearchPaths = true, diagnosticMode = 'openFilesOnly', useLibraryCodeForTypes = true, typeCheckingMode = 'off' } } } }
+vim.lsp.config('pyright', { on_attach = on_attach, settings = { pyright = { autoImportCompletion = true, }, python = { analysis = { autoSearchPaths = true, diagnosticMode = 'openFilesOnly', useLibraryCodeForTypes = true, typeCheckingMode = 'off' } } } })
 -- basedpyright stuff END
-
--- lspconfig.pyright.setup { on_attach = on_attach, settings = { pyright = { autoImportCompletion = true, }, python = { analysis = { autoSearchPaths = true, diagnosticMode = 'openFilesOnly', useLibraryCodeForTypes = true, typeCheckingMode = 'off' } } } }
-lspconfig.intelephense.setup {
-    filetypes = { 'php', 'block' },
-    -- root_dir = lspconfig.util.root_pattern(".git"),
-    settings = {
-        intelephense = {
-            files = {
-                maxSize = 1000000,
-            },
-        }
-    }
-}
-lspconfig.ts_ls.setup {}
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -206,4 +87,53 @@ vim.api.nvim_create_autocmd('LspAttach', {
             vim.lsp.buf.format { async = true }
         end, opts)
     end,
+})
+
+vim.lsp.config('lua_ls', {
+  on_init = function(client)
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if
+        path ~= vim.fn.stdpath('config')
+        and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+      then
+        return
+      end
+    end
+
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most
+        -- likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Tell the language server how to find Lua modules same way as Neovim
+        -- (see `:h lua-module-load`)
+        path = {
+          'lua/?.lua',
+          'lua/?/init.lua',
+        },
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+          -- Depending on the usage, you might want to add additional paths
+          -- here.
+          -- '${3rd}/luv/library'
+          -- '${3rd}/busted/library'
+        }
+        -- Or pull in all of 'runtimepath'.
+        -- NOTE: this is a lot slower and will cause issues when working on
+        -- your own configuration.
+        -- See https://github.com/neovim/nvim-lspconfig/issues/3189
+        -- library = {
+        --   vim.api.nvim_get_runtime_file('', true),
+        -- }
+      }
+    })
+  end,
+  settings = {
+    Lua = {}
+  }
 })
