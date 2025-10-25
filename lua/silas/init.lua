@@ -13,6 +13,7 @@ if not vim.loop.fs_stat(lazypath) then
 	})
 end
 vim.opt.rtp:prepend(lazypath)
+vim.g.lazyvim_default_keymaps = false
 require("lazy").setup({
 	spec = {
 		-- 1. Load LazyVim's core plugins
@@ -24,3 +25,5 @@ require("lazy").setup({
 		{ import = "silas.plugins" },
 	},
 })
+vim.g.lazyvim_check_order = false
+vim.g.lazyvim_default_keymaps = false

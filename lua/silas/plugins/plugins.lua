@@ -15,7 +15,27 @@ return {
     },
     {
         "ThePrimeagen/harpoon",
-        dependencies = { 'nvim-lua/plenary.nvim' }
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        config = function()
+            local mark = require("harpoon.mark")
+            local ui = require("harpoon.ui")
+
+            -- Forcefully delete any conflicting keymaps
+            -- This will remove the default <C-h> window navigation
+            pcall(vim.keymap.del, "n", "<C-h>")
+            pcall(vim.keymap.del, "n", "<C-j>")
+            pcall(vim.keymap.del, "n", "<C-k>")
+            pcall(vim.keymap.del, "n", "<C-l>")
+    
+            vim.keymap.set("n", "<leader>a", mark.add_file, { desc = "Harpoon add file" })
+            vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu, { desc = "Harpoon quick menu" })
+    
+            -- These will now work without conflict
+            vim.keymap.set("n", "<C-h>", function() ui.nav_file(1) end, { desc = "Harpoon nav file 1" })
+            vim.keymap.set("n", "<C-j>", function() ui.nav_file(2) end, { desc = "Harpoon nav file 2" })
+            vim.keymap.set("n", "<C-k>", function() ui.nav_file(3) end, { desc = "Harpoon nav file 3" })
+            vim.keymap.set("n", "<C-l>", function() ui.nav_file(4) end, { desc = "Harpoon nav file 4" })
+        end
     },
     {
         "mason-org/mason.nvim"
@@ -68,15 +88,10 @@ return {
         -- refer to the configuration section below
         bigfile = { enabled = true },
         dashboard = { enabled = true },
-        explorer = { enabled = true },
         indent = { enabled = true },
-        input = { enabled = true },
-        picker = { enabled = true },
         notifier = { enabled = true },
         quickfile = { enabled = true },
         scope = { enabled = true },
-        scroll = { enabled = true },
-        statuscolumn = { enabled = true },
         words = { enabled = true },
       },
     },
