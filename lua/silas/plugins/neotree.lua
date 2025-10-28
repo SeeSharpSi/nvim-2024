@@ -18,10 +18,19 @@ return {
   -- The entire setup block from your after/plugin/neotree.lua file
   config = function()
   require("neo-tree").setup({
-      close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
+      close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
       popup_border_style = "NC", -- or "" to use 'winborder' on Neovim v0.11+
       clipboard = {
         sync = "none", -- or "global"/"universal" to share a clipboard for each/all Neovim instance(s), respectively
+      },
+      event_handlers = {
+          {
+              event = "neo_tree_buffer_enter",
+              handler = function()
+                  vim.opt_local.number = true
+                  vim.opt_local.relativenumber = true
+              end,
+          },
       },
       enable_git_status = true,
       enable_diagnostics = true,

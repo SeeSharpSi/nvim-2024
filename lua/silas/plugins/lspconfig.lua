@@ -92,6 +92,8 @@ return {
       vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Diagnostics: Prev" })
       vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Diagnostics: Next" })
       vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, { desc = "Diagnostics: Set Loclist" })
+      
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = "LSP Hover" })
 
       -- Keymap from lua/silas/remap.lua
       vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "LSP: Format" })
@@ -114,7 +116,7 @@ return {
           -- Mappings from after/plugin/lsp.lua
           vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
           vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-          vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+          -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
           vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
           vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
           vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
