@@ -1,4 +1,6 @@
-require("silas.remap")
+-- lua/silas/init.lua
+
+require("silas.remap") -- We will clean this up in Step 3
 require("silas.set")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -14,16 +16,12 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 vim.g.lazyvim_default_keymaps = false
-require("lazy").setup({
-	spec = {
-		-- 1. Load LazyVim's core plugins
 
-		-- 2. (Optional) Load any LazyVim extras here
-		-- { import = "lazyvim.plugins.extras.lang.typescript" },
-
-		-- 3. Load your own custom plugins (from lua/silas/plugins/plugins.lua)
-		{ import = "silas.plugins" },
-	},
+-- VVV CHANGE THIS VVV
+require("lazy").setup("silas.plugins", {
+  -- Your lazy.setup options here, if any
 })
+-- ^^^ CHANGE THIS ^^^
+
 vim.g.lazyvim_check_order = false
 vim.g.lazyvim_default_keymaps = false
