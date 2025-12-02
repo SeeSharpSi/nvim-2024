@@ -29,7 +29,7 @@ return {
     config = function()
       -- This 'util' is required for the pyright config you had.
       -- Assuming you're using LazyVim, this is the correct path.
-      local util = require("lazyvim.util")
+      local util = require("lazy.util")
 
       --
       -- START of code from after/plugin/lsp.lua
@@ -38,6 +38,10 @@ return {
       vim.lsp.enable('gopls')
       vim.lsp.enable('html')
       vim.lsp.enable('ts_ls')
+      vim.lsp.enable('bashls')
+      vim.lsp.enable('yamlls')
+      vim.lsp.enable('phpactor')
+      vim.lsp.enable('phptools')
 
       local tmp_cmd = "/Users/silas/go/bin/sqls"
       if vim.fn.exists('g:os') == 0 then

@@ -10,9 +10,7 @@ return {
   -- The keymap from your remap.lua file
   -- This will now lazy-load the plugin when you press it
   keys = {
-    { "<leader>pv", function()
-      vim.cmd.Neotree "toggle"
-    end, desc = "Toggle Neo-tree" },
+    { "<leader>pv", ":Neotree toggle reveal<CR>", desc = "toggle neotree" },
   },
 
   -- The entire setup block from your after/plugin/neotree.lua file

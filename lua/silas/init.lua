@@ -25,3 +25,5 @@ require("lazy").setup("silas.plugins", {
 
 vim.g.lazyvim_check_order = false
 vim.g.lazyvim_default_keymaps = false
+vim.cmd("colorscheme nord")
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
