@@ -29,6 +29,12 @@ return {
                   vim.opt_local.relativenumber = true
               end,
           },
+          {
+              event = "file_opened",
+              handler = function()
+                  require("neo-tree.command").execute({ action = "close" })
+              end,
+          },
       },
       enable_git_status = true,
       enable_diagnostics = true,
