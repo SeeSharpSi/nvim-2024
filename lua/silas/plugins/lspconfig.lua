@@ -30,6 +30,7 @@ return {
       -- This 'util' is required for the pyright config you had.
       -- Assuming you're using LazyVim, this is the correct path.
       local util = require("lazy.util")
+      local lsp_util = vim.lsp.util
 
       --
       -- START of code from after/plugin/lsp.lua
@@ -96,6 +97,37 @@ return {
       vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Diagnostics: Prev" })
       vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Diagnostics: Next" })
       vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, { desc = "Diagnostics: Set Loclist" })
+
+      vim.lsp.handlers["textDocument/hover"] = function(_, result, ctx, config)
+        config = config or {}
+        config.focus_id = ctx.method
+        if vim.api.nvim_get_current_buf() ~= ctx.bufnr then
+          return
+        end
+        if not (result and result.contents) then
+          if config.silent ~= true then
+            vim.notify('No information available')
+          end
+          return
+        end
+
+        local contents
+        if type(result.contents) == 'table' and result.contents.kind == 'plaintext' then
+          contents = vim.split(result.contents.value or '', '\n', { trimempty = true })
+        else
+          contents = lsp_util.convert_input_to_markdown_lines(result.contents)
+          contents = vim.split(table.concat(contents, '\n'), '\n', { trimempty = true })
+        end
+
+        if vim.tbl_isempty(contents) then
+          if config.silent ~= true then
+            vim.notify('No information available')
+          end
+          return
+        end
+
+        return lsp_util.open_floating_preview(contents, nil, config)
+      end
       
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = "LSP Hover" })
 
